@@ -1,6 +1,8 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
+import fileUpload from "express-fileupload";
+
 import router from "./routes";
 import sequelize from "./config/database";
 
@@ -15,12 +17,14 @@ app.use(
     credentials: true,
   })
 );
+app.use(fileUpload());
+app.use(express.static("static"));
 app.use("/api", router);
 
 const start = async () => {
   try {
     await sequelize.sync({
-      force: true,
+      force: false,
       logging: false,
     });
 

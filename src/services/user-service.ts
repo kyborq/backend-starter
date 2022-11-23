@@ -16,10 +16,13 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, 3);
 
     const user = await User.create({ login, password: hashPassword });
-    const tokens = tokenService.generateTokens({ ...user });
+    const tokens = tokenService.generateTokens({
+      id: user.id,
+      login: user.login,
+    });
     await tokenService.saveToken(user.id, tokens.refreshToken);
 
-    return { ...tokens, user };
+    return { ...tokens, user: { id: user.id, login: user.login } };
   }
 
   async login(login: string, password: string) {
@@ -36,10 +39,11 @@ class UserService {
       throw "Неверный пароль";
     }
 
-    const tokens = tokenService.generateTokens({ ...existing });
-    await tokenService.saveToken(existing.id, tokens.refreshToken);
+    const user = { id: existing.id, login: existing.login };
+    const tokens = tokenService.generateTokens({ ...user });
+    await tokenService.saveToken(user.id, tokens.refreshToken);
 
-    return { ...tokens, user: existing };
+    return { ...tokens, user: user };
   }
 
   async logout(refreshToken: string) {
@@ -61,10 +65,13 @@ class UserService {
     const user = await User.findOne({
       where: userData["id"],
     });
-    const tokens = tokenService.generateTokens({ ...user });
+    const tokens = tokenService.generateTokens({
+      id: user.id,
+      login: user.login,
+    });
 
     await tokenService.saveToken(user.id, tokens.refreshToken);
-    return { ...tokens, user };
+    return { ...tokens, user: { id: user.id, login: user.login } };
   }
 
   async getAll() {

@@ -12,6 +12,9 @@ class User extends Model {
   @Column
   email!: string;
 
+  @Column
+  avatar!: string;
+
   @HasOne(() => Token, { foreignKey: "userId" })
   token: Token;
 }

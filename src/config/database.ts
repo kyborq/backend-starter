@@ -8,6 +8,7 @@ const sequelize = new Sequelize({
   dialect: "mysql",
   username: "root",
   password: "password",
+  logging: false,
   define: {
     timestamps: false,
   },

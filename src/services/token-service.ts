@@ -5,11 +5,11 @@ import Token from "../models/token-model";
 class TokenService {
   generateTokens(payload: string | object | Buffer) {
     const accessToken = sign(payload, "JWT_ACCESS_SECRET", {
-      expiresIn: "15s",
+      expiresIn: "30m",
     });
 
     const refreshToken = sign(payload, "JWT_REFRESH_SECRET", {
-      expiresIn: "30s",
+      expiresIn: "30d",
     });
 
     return {

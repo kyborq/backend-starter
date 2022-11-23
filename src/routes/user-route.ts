@@ -7,6 +7,7 @@ const userController = new UserController();
 
 userRouter.post("/register", userController.registration);
 userRouter.post("/login", userController.login);
+userRouter.post("/avatar/upload", authMiddleware, userController.uploadAvatar);
 userRouter.get("/logout", userController.logout);
 userRouter.get("/refresh", userController.refresh);
 userRouter.get("/", authMiddleware, userController.getAll);

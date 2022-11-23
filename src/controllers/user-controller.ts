@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { userService } from "../services/user-service";
 
 class UserController {
@@ -72,6 +73,25 @@ class UserController {
       return res.json(user);
     } catch (e) {
       return res.json(e);
+    }
+  }
+
+  async uploadAvatar(req, res) {
+    try {
+      const { file } = req.files;
+      const { id } = req.user;
+      console.log(req.user.id);
+
+      const avatarName = v4().split("-")[0] + ".png";
+      const user = await userService.getUser(id);
+
+      file.mv(`static/${avatarName}`);
+      user.avatar = avatarName;
+      await user.save();
+
+      return res.json({ user: avatarName, message: "Avatar uploaded" });
+    } catch (e) {
+      return res.json({ error: "Ошибка чето там..." });
     }
   }
 }
